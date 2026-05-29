@@ -1,14 +1,14 @@
 package com.anajulia.biblioteca.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.anajulia.biblioteca.model.Livro;
 import com.anajulia.biblioteca.model.Pessoa;
 import com.anajulia.biblioteca.repository.LivroRepository;
 import com.anajulia.biblioteca.repository.PessoaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.util.List;
-
-import java.util.List;
 
 @Service
 public class PessoaService {
