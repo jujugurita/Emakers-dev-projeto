@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db-biblioteca:
+    image: mysql:8.0
+    container_name: db-biblioteca
+    environment:
+      MYSQL_DATABASE: biblioteca
+      MYSQL_ROOT_PASSWORD: '158273'
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p158273"]
+      timeout: 5s
+      retries: 5
+
+  app-biblioteca:
+    build: .
+    container_name: app-biblioteca
+    ports:
+      - "8080:8080"
+    depends_on:
+      db-biblioteca:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-biblioteca:3306/biblioteca?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=158273
+
+volumes:
+  mysql_data:
