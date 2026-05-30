@@ -3,6 +3,7 @@ package com.anajulia.biblioteca.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder; // 🚨 IMPORTANTE: Importar o codificador
 import org.springframework.stereotype.Service;
 
 import com.anajulia.biblioteca.model.Livro;
@@ -22,11 +23,19 @@ public class PessoaService {
     @Autowired
     private ViaCepService viaCepService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder; // 🚨 SEGREDO 1: Injeta o codificador do Spring Security
+
     // CRUD: Criar
     public Pessoa salvar(Pessoa pessoa) {
         if (!viaCepService.validarCep(pessoa.getCep())) {
             throw new RuntimeException("CEP inválido ou não encontrado na API externa!");
         }
+        
+        // 🚨 SEGREDO 2: Criptografa a senha antes de mandar para o banco de dados
+        String senhaCriptografada = passwordEncoder.encode(pessoa.getSenha());
+        pessoa.setSenha(senhaCriptografada);
+        
         return pessoaRepository.save(pessoa);
     }
 
@@ -51,7 +60,11 @@ public class PessoaService {
         pessoa.setCpf(pessoaAtualizada.getCpf());
         pessoa.setCep(pessoaAtualizada.getCep());
         pessoa.setEmail(pessoaAtualizada.getEmail());
-        pessoa.setSenha(pessoaAtualizada.getSenha());
+        
+        // 🚨 SEGREDO 3: Criptografa também na hora de atualizar a senha
+        String senhaCriptografada = passwordEncoder.encode(pessoaAtualizada.getSenha());
+        pessoa.setSenha(senhaCriptografada);
+        
         return pessoaRepository.save(pessoa);
     }
 
