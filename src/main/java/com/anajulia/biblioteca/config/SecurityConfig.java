@@ -16,22 +16,31 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
-            .csrf(csrf -> csrf.disable()) // Desabilita CSRF para permitir requisições POST/PUT dos seus testes
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Deixa livre o Swagger-UI e os caminhos da documentação para você conseguir testar
-                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                // Qualquer outro endpoint da aplicação (Livros, Pessoas, etc.) exigirá autenticação
+
+                // Swagger liberado
+                .requestMatchers(
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
+                ).permitAll()
+
+                // Cadastro de pessoa liberado
+                .requestMatchers("/api/pessoas").permitAll()
+
+                // Todo o resto exige login
                 .anyRequest().authenticated()
             )
-            .httpBasic(withDefaults()); // Ativa autenticação básica (usuário e senha em caixas de diálogo ou headers)
+            .httpBasic(withDefaults());
 
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // Obrigatório pelo Spring Security para criptografar as senhas de forma segura
         return new BCryptPasswordEncoder();
     }
 }

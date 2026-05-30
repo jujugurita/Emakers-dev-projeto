@@ -23,7 +23,7 @@ public class Pessoa {
     private String telefone;
     private String cep;
     private String email;
-    private String string; // Campo utilizado para simular a senha
+    private String senha; 
 
     @ManyToMany
     @JoinTable(
@@ -33,7 +33,6 @@ public class Pessoa {
     )
     private List<Livro> livrosEmprestados;
 
-    // --- Métodos Manuais de Acesso (Getters e Setters Explicítos) ---
     public Long getIdPessoa() { return idPessoa; }
     public void setIdPessoa(Long idPessoa) { this.idPessoa = idPessoa; }
 
@@ -55,8 +54,8 @@ public class Pessoa {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getSenha() { return string; }
-    public void setSenha(String senha) { this.string = senha; }
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
 
     public List<Livro> getLivrosEmprestados() { return livrosEmprestados; }
     public void setLivrosEmprestados(List<Livro> livrosEmprestados) { this.livrosEmprestados = livrosEmprestados; }
